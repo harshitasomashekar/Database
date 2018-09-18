@@ -1,0 +1,89 @@
+#to create a database
+mysql> create database harshita;
+
+#to use that database
+mysql> use harshita
+
+#to create physicians table
+mysql> create table Physicians(id int(10),  name varchar(30), password varchar(20));
+
+#to insert values to table
+mysql> insert into Physicians values('123','Dr.Aditya','abcd');
+
+#to display table
+mysql> select * from Physicians;
+
+/*display will be
++------+-----------+----------+
+| id   | name      | password |
++------+-----------+----------+
+|  123 | Dr.Aditya | abcd     |
++------+-----------+----------+
+*/
+
+#to create patients table
+
+ create table Patients(Id_Patients int(10),PersonalNo int(30), SecondName varchar(30), FirstName varchar(30), Sex varchar(4), DateofBirth varchar(30), PlaceofBirth varchar(30), Physician varchar(30), foreign key(Physician) references Physicians(name),primary key(PersonalNo));
+
+#to insert data
+
+mysql> insert into Patients values('141','123456789','s','abc','male','01Jan2000','XYZ','Dr.Aditya');                 
+
+#to display
+mysql> select * from Patients;
+
+#display will be
++-------------+------------+------------+-----------+------+-------------+--------------+-----------+
+| Id_Patients | PersonalNo | SecondName | FirstName | Sex  | DateofBirth | PlaceofBirth | Physician |
++-------------+------------+------------+-----------+------+-------------+--------------+-----------+
+|         141 |  123456789 | s          | abc       | male | 01Jan2000   | XYZ          | Dr.Aditya |
++-------------+------------+------------+-----------+------+-------------+--------------+-----------+
+#to create consulatation table
+
+mysql> create table consultation (Idconsultation int(10),PersonalNo int(30),DateofConsultation varchar(30), Weight float(10), Height float(20), Diagnostic varchar(30), Selectedbones varchar(30), Realscore varchar(30), Maturityscore varchar(30), Boneage int(30), Physician varchar(30), foreign key(PersonalNo) references Patients(PersonalNo), foreign key(Physician) references Physicians(name), primary key(diagnostic));
+
+#to insert data
+
+mysql> insert into consultation values('111','123456789','23sept2018','60.5','5.5','facture','facial','30','15','22','XYZ');
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`harshita`.`consultation`, CONSTRAINT `consultation_ibfk_2` FOREIGN KEY (`Physician`) REFERENCES `Physicians` (`name`))
+mysql> insert into consultation values('111','123456789','23sept2018','60.5','5.5','facture','facial','30','15','22','Dr.Aditya');
+
+#to display
+
+mysql> select * from consultation;
++----------------+------------+--------------------+--------+--------+------------+---------------+-----------+---------------+---------+-----------+
+| Idconsultation | PersonalNo | DateofConsultation | Weight | Height | Diagnostic | Selectedbones | Realscore | Maturityscore | Boneage | Physician |
++----------------+------------+--------------------+--------+--------+------------+---------------+-----------+---------------+---------+-----------+
+|            111 |  123456789 | 23sept2018         |   60.5 |    5.5 | facture    | facial        | 30        | 15            |      22 | Dr.Aditya |
++----------------+------------+--------------------+--------+--------+------------+---------------+-----------+---------------+---------+-----------+
+
+#to create bones
+mysql>  create table bones(Id varchar(10),Bone varchar(30), Stage varchar(30), Text varchar(20),primary key(Bone), foreign key(Stage) references consultation(Diagnostic));
+
+#to insert
+mysql> insert into bones values('111','facial','facture','aircrack');
+
+#to display
+mysql> select * from bones ;
++------+--------+---------+----------+
+| Id   | Bone   | Stage   | Text     |
++------+--------+---------+----------+
+| 111  | facial | facture | aircrack |
++------+--------+---------+----------+
+
+#to create bonestage
+create table bonestage(id varchar(30),name varchar(30), stages varchar(30),foreign key(id) references consultation(Diagnostic));
+
+#to insert data
+mysql> insert into bonestage values('facture', 'elbow','primary');
+
+#to display
+mysql> insert into bonestage values('facture', 'elbow','primary');
+
+
+mysql> select * from bonestage;
++---------+-------+---------+
+| id      | name  | stages  |
++---------+-------+---------+
+| facture | elbow | primary |
++---------+-------+---------+
